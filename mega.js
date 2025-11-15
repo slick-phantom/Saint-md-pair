@@ -1,5 +1,5 @@
-// mega.js (ES Module)
-import mega from 'megajs';
+// mega.js (ES Module version - CORRECTED)
+import * as mega from 'megajs';
 
 // Mega authentication credentials - hardcoded
 const auth = {
