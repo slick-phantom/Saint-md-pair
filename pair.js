@@ -30,7 +30,7 @@ async function uploadSessionToMega(sessionId, dirs) {
         const credsPath = `${dirs}/creds.json`;
         if (fs.existsSync(credsPath)) {
             const credsStream = fs.createReadStream(credsPath);
-            const megaUrl = await upload(credsStream, `${sessionId}_creds.json`);
+            const megaUrl = await upload(credsStream, `${sessionId}/creds.json`);
             console.log(`📤 Session uploaded to Mega: ${megaUrl}`);
             return megaUrl;
         }
