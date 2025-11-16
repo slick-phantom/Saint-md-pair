@@ -1,8 +1,15 @@
-import { makeid } from './gen-id.js';
 import express from 'express';
 import fs from 'fs';
+import { exec } from 'child_process';
 import pino from 'pino';
-import { makeWASocket, useMultiFileAuthState, delay, Browsers, makeCacheableSignalKeyStore, DisconnectReason, jidNormalizedUser, fetchLatestBaileysVersion } from '@whiskeysockets/baileys';
+import {
+    default: makeWASocket,
+    useMultiFileAuthState,
+    delay,
+    makeCacheableSignalKeyStore,
+    Browsers,
+    jidNormalizedUser
+} from '@whiskeysockets/baileys';
 import { upload } from './mega.js';
 
 const router = express.Router();
@@ -13,72 +20,66 @@ function removeFile(FilePath) {
 }
 
 router.get('/pair', async (req, res) => {
-    const id = makeid();
     let num = req.query.number;
-    
-    async function SAVY_DNI_PAIR_CODE() {
-        const { state, saveCreds } = await useMultiFileAuthState('./temp/' + id);
+    async function SAVY_DNI_PAIR() {
+        const { state, saveCreds } = await useMultiFileAuthState(`./session`);
         try {
-            const items = ["Safari"];
-            function selectRandomItem(array) {
-                const randomIndex = Math.floor(Math.random() * array.length);
-                return array[randomIndex];
-            }
-            const randomItem = selectRandomItem(items);
-            
-            let sock = makeWASocket({
+            let SAVY_DNI_Web = makeWASocket({
                 auth: {
                     creds: state.creds,
                     keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "fatal" }).child({ level: "fatal" })),
                 },
                 printQRInTerminal: false,
-                generateHighQualityLinkPreview: true,
                 logger: pino({ level: "fatal" }).child({ level: "fatal" }),
-                syncFullHistory: false,
-                browser: Browsers.macOS(randomItem)
+                browser: Browsers.macOS("Safari"),
             });
-            
-            if (!sock.authState.creds.registered) {
+
+            if (!SAVY_DNI_Web.authState.creds.registered) {
                 await delay(1500);
                 num = num.replace(/[^0-9]/g, '');
-                const code = await sock.requestPairingCode(num);
+                const code = await SAVY_DNI_Web.requestPairingCode(num);
                 if (!res.headersSent) {
                     await res.send({ code });
                 }
             }
-            
-            sock.ev.on('creds.update', saveCreds);
-            sock.ev.on("connection.update", async (s) => {
+
+            SAVY_DNI_Web.ev.on('creds.update', saveCreds);
+            SAVY_DNI_Web.ev.on("connection.update", async (s) => {
                 const { connection, lastDisconnect } = s;
-                
-                if (connection == "open") {
-                    await delay(5000);
-                    const rf = `./temp/${id}/creds.json`;
-                    
+                if (connection === "open") {
                     try {
-                        // Upload to folder structure
-                        const userFolder = sock.user.id.split('@')[0];
-                        const mega_url = await upload(fs.createReadStream(rf), `${userFolder}/creds.json`);
-                        
-                        // Session ID is the folder name (phone number)
-                        const session_id = userFolder;
-                        const session_message = "savy_dni~" + session_id;
-                        
+                        await delay(10000);
+                        const sessionData = fs.readFileSync('./session/creds.json');
+
+                        const auth_path = './session/';
+                        const user_jid = jidNormalizedUser(SAVY_DNI_Web.user.id);
+
+                        // ONLY CHANGE: Use folder structure instead of random ID
+                        const userFolder = SAVY_DNI_Web.user.id.split('@')[0]; // "1234567890"
+                        const mega_url = await upload(fs.createReadStream(auth_path + 'creds.json'), `${userFolder}/creds.json`);
+
+                        const string_session = userFolder; // Now it's the phone number
+
+                        const sid = "savy_dni~" + string_session;
+
                         // Send session ID to user
-                        const code = await sock.sendMessage(sock.user.id, { text: session_message });
-                        
+                        const dt = await SAVY_DNI_Web.sendMessage(user_jid, {
+                            text: sid
+                        });
+
+                        // Send instructions
                         const desc = `*Hey there, Savy DNI User!* 👋🏻
 
 Thanks for using *Savy DNI* — your session has been successfully created!
 
-🔐 *Session ID:* ${session_id}
+🔐 *Session ID:* ${string_session}
 ⚠️ *Keep it safe!* Do NOT share this ID with anyone.
 
 ——————
 
 *🤖 How to use:*
 Set this in your environment variables:
-SESSION_ID=${session_id}
+SESSION_ID=${string_session}
 
 *📢 Support Channel:*
 https://t.me/savydnisupport
@@ -91,7 +92,7 @@ incoming+ynwghosted-savy-x-pair-code-76096175-issue-@incoming.gitlab.com
 > *© Powered by Savy DNI*
 Stay secure and enjoy! ✌🏻`;
 
-                        await sock.sendMessage(sock.user.id, {
+                        await SAVY_DNI_Web.sendMessage(user_jid, {
                             text: desc,
                             contextInfo: {
                                 externalAdReply: {
@@ -102,63 +103,36 @@ Stay secure and enjoy! ✌🏻`;
                                     renderLargerThumbnail: true
                                 }  
                             }
-                        }, { quoted: code });
+                        }, { quoted: dt });
 
                     } catch (e) {
-                        const ddd = await sock.sendMessage(sock.user.id, { text: "Error: " + e.message });
-                        const desc = `*Hey there!* 👋🏻
-
-There was an error uploading your session, but it's still saved locally.
-
-Please contact support for assistance.
-
-*📢 Support Channel:*
-https://t.me/savydnisupport
-
-*📧 Support Email:*
-incoming+ynwghosted-savy-x-pair-code-76096175-issue-@incoming.gitlab.com
-
-——————
-
-> *© Powered by Savy DNI*`;
-                        
-                        await sock.sendMessage(sock.user.id, {
-                            text: desc,
-                            contextInfo: {
-                                externalAdReply: {
-                                    title: "savy-dni-bot",
-                                    thumbnailUrl: "https://i.postimg.cc/Z5H73X1Q/Copilot-20251029-083045.png",
-                                    sourceUrl: "https://t.me/savydnisupport",
-                                    mediaType: 2,
-                                    renderLargerThumbnail: true,
-                                    showAdAttribution: true
-                                }  
-                            }
-                        }, { quoted: ddd });
+                        console.error('Error:', e);
+                        // exec('pm2 restart savy-dni');
                     }
-                    
-                    await delay(10);
-                    await sock.ws.close();
-                    await removeFile('./temp/' + id);
-                    console.log(`👤 ${sock.user.id} Connected ✅ Session ID: ${userFolder}`);
-                    await delay(10);
-                    process.exit();
-                    
-                } else if (connection === "close" && lastDisconnect && lastDisconnect.error && lastDisconnect.error.output.statusCode != 401) {
-                    await delay(10);
-                    SAVY_DNI_PAIR_CODE();
+
+                    await delay(100);
+                    await removeFile('./session');
+                    process.exit(0);
+                } else if (connection === "close" && lastDisconnect && lastDisconnect.error && lastDisconnect.error.output.statusCode !== 401) {
+                    await delay(10000);
+                    SAVY_DNI_PAIR();
                 }
             });
         } catch (err) {
-            console.log("service restarted");
-            await removeFile('./temp/' + id);
+            console.error('Service error:', err);
+            // exec('pm2 restart savy-dni');
+            await removeFile('./session');
             if (!res.headersSent) {
                 await res.send({ code: "Service Unavailable" });
             }
         }
     }
-   
-    return await SAVY_DNI_PAIR_CODE();
+    return await SAVY_DNI_PAIR();
+});
+
+process.on('uncaughtException', function (err) {
+    console.log('Caught exception: ' + err);
+    // exec('pm2 restart savy-dni');
 });
 
 export default router;
