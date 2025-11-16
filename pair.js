@@ -3,7 +3,7 @@ import fs from 'fs';
 import { exec } from 'child_process';
 import pino from 'pino';
 import {
-    default: makeWASocket,
+    makeWASocket,
     useMultiFileAuthState,
     delay,
     makeCacheableSignalKeyStore,
