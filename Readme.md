@@ -11,3 +11,15 @@
 <img src="https://i.postimg.cc/Z5H73X1Q/Copilot-20251029-083045.png" alt="SDNight Multi-Device Pairing" width="500" style="border-radius: 10px;" />
 
 </div>
+
+## PROJECT STATUS
+
++-------------+-------------+-------------+-------------+
+|    ACTIVE   | MAINTAINED  |  LICENSED   | DARK SNIPER |
+|      ✅     |      ✅     |      ✅     |      ✅     |
+|   🔥 WORKING  |  🛠️ SUPPORT  |  📜 OPEN SOURCE |  🎯 CUSTOM   |
++-------------+-------------+-------------+-------------+
+| MULTI-DEVICE| PRODUCTION  |   SECURE    |  SCALABLE   |
+|      ✅     |      ✅     |      ✅     |      ✅     |
+|  📱 CROSS-PLAT |  🏭 STABLE   |  🔒 PROTECTED |  📈 GROWING  |
++-------------+-------------+-------------+-------------+
