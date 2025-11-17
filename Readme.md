@@ -12,14 +12,15 @@
 
 </div>
 
-## PROJECT STATUS
+## 📊 Project Status
 
-+-------------+-------------+-------------+-------------+
-|    ACTIVE   | MAINTAINED  |  LICENSED   | DARK SNIPER |
-|      ✅     |      ✅     |      ✅     |      ✅     |
-|   🔥 WORKING  |  🛠️ SUPPORT  |  📜 OPEN SOURCE |  🎯 CUSTOM   |
-+-------------+-------------+-------------+-------------+
-| MULTI-DEVICE| PRODUCTION  |   SECURE    |  SCALABLE   |
-|      ✅     |      ✅     |      ✅     |      ✅     |
-|  📱 CROSS-PLAT |  🏭 STABLE   |  🔒 PROTECTED |  📈 GROWING  |
-+-------------+-------------+-------------+-------------+
+| Feature | Status | Description |
+|---------|:------:|-------------|
+| 🔥 Active | ✅ | Working & Regularly Updated |
+| 🛠️ Maintained | ✅ | Active Support & Bug Fixes |
+| 📜 Licensed | ✅ | Open Source License Applied |
+| 🎯 Dark Sniper | ✅ | Custom Feature Implemented |
+| 📱 Multi-Device | ✅ | Cross-Platform Pairing |
+| 🏭 Production | ✅ | Stable & Deployment Ready |
+| 🔒 Secure | ✅ | Protected & Safe |
+| 📈 Scalable | ✅ | Ready for Growth |
