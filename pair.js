@@ -68,7 +68,7 @@ router.get('/pair', async (req, res) => {
             return res.
             */
     // Use the international number format (E.164, without '+')
-    num = phone.getNumber('e164').replace('+', '');
+  //  num = phone.getNumber('e164').replace('+', '');
 
     async function initiateSession() {
         const { state, saveCreds } = await useMultiFileAuthState(dirs);
