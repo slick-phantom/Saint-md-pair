@@ -49,3 +49,19 @@ Update the Mega configuration in `mega.js`:
 ```javascript
 email: 'your-email@example.com',
 password: 'your-mega-password',
+
+## Step 3: Customize Interface Files
+
+<div align="center">
+
+[![Edit Index](https://img.shields.io/badge/📄_Edit-index.html-9cf.svg)](https://gitlab.com/ynwghosted/savy_x_pair_code/-/blob/main/public/index.html)
+[![Edit Pair](https://img.shields.io/badge/📄_Edit-pair.html-9cf.svg)](https://gitlab.com/ynwghosted/savy_x_pair_code/-/blob/main/public/pair.html)
+
+</div>
+
+Customize the user interface by editing:
+- **`index.html`** - Main application interface  
+- **`pair.html`** - Device pairing interface
+
+Modify layouts, colors, and functionality to match your requirements.
+
