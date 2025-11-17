@@ -77,7 +77,15 @@ Modify layouts, colors, and functionality to match your requirements.
 
 </div>
 
+<div align="center">
 
+[![Telegram Support](https://img.shields.io/badge/💬_Support-Telegram_Group-2CA5E0.svg)](https://t.me/savydnisupport)
+
+[![License](https://img.shields.io/badge/📜_License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+[![Star Repository](https://img.shields.io/badge/⭐_Star-Repo-blue.svg)](https://gitlab.com/ynwghosted/savy_x_pair_code)
+
+</div>
 
 
 
