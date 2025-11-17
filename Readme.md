@@ -49,6 +49,7 @@ Update the Mega configuration in `mega.js`:
 ```javascript
 email: 'your-email@example.com',
 password: 'your-mega-password',
+```
 
 ## Step 3: Customize Interface Files
 
@@ -60,8 +61,8 @@ password: 'your-mega-password',
 </div>
 
 Customize the user interface by editing:
-- **`index.html`** - Main application interface  
-- **`pair.html`** - Device pairing interface
+- *`index.html`* - Main application interface  
+- *`pair.html`* - Device pairing interface
 
 Modify layouts, colors, and functionality to match your requirements.
 
