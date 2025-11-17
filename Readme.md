@@ -32,3 +32,20 @@
 [![Fork](https://img.shields.io/badge/Step_1-Fork_Repo-brightgreen.svg)](https://gitlab.com/ynwghosted/savy_x_pair_code/-/forks/new)
 
 </div>
+
+
+```markdown
+## Step 2: Configure Mega Credentials
+
+<div align="center">
+
+[![Edit Mega.js](https://img.shields.io/badge/⚙️_Step_2-Edit_Mega_Credentials-important.svg)](https://gitlab.com/ynwghosted/savy_x_pair_code/-/blob/main/mega.js)
+
+[![Get Mega Credentials](https://img.shields.io/badge/🔑_Get_Credentials-MegaNZ_Developer_Portal-blue.svg)](https://mega.nz/sdk)
+
+</div>
+
+Update the Mega configuration in `mega.js`:
+```javascript
+email: 'your-email@example.com',
+password: 'your-mega-password',
