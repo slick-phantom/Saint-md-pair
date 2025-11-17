@@ -24,3 +24,7 @@
 | 🏭 Production | ✅ | Stable & Deployment Ready |
 | 🔒 Secure | ✅ | Protected & Safe |
 | 📈 Scalable | ✅ | Ready for Growth |
+
+## Step 1: Fork the Repository
+
+[![Fork](https://img.shields.io/badge/Step_1-Fork_Repo-brightgreen.svg)](https://gitlab.com/ynwghosted/savy_x_pair_code/-/forks/new)
