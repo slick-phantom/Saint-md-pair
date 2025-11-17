@@ -66,3 +66,18 @@ Customize the user interface by editing:
 
 Modify layouts, colors, and functionality to match your requirements.
 
+## Step 4: Deploy to Cloud Platform
+
+<div align="center">
+
+[![Deploy on Render](https://img.shields.io/badge/🚀_Deploy-Render-46a3b7.svg)](https://dashboard.render.com/)
+[![Deploy on Heroku](https://img.shields.io/badge/🚀_Deploy-Heroku-430098.svg)](https://dashboard.heroku.com/new-app)
+[![Deploy on Koyeb](https://img.shields.io/badge/🚀_Deploy-Koyeb-121117.svg)](https://app.koyeb.com/apps)
+[![Deploy on Railway](https://img.shields.io/badge/🚀_Deploy-Railway-0B0D0E.svg)](https://railway.app/new)
+
+</div>
+
+
+
+
+
