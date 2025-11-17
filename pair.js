@@ -2,7 +2,6 @@ import express from 'express';
 import fs from 'fs';
 import pino from 'pino';
 import { makeWASocket, useMultiFileAuthState, delay, makeCacheableSignalKeyStore, Browsers, jidNormalizedUser, fetchLatestBaileysVersion } from 'sdnight';
-import pn from 'awesome-phonenumber';
 import { upload, download } from './mega.js'; // Import your mega functions
 
 const router = express.Router();
@@ -61,17 +60,13 @@ router.get('/pair', async (req, res) => {
 
     // Clean the phone number - remove any non-digit characters
     num = num.replace(/[^0-9]/g, '');
-
+/*
     // Validate the phone number using awesome-phonenumber
     const phone = pn('+' + num);
     if (!phone.isValid()) {
         if (!res.headersSent) {
-            return res.status(400).send({ 
-                code: 'Invalid phone number. Please enter your full international number (e.g., 15551234567 for US, 447911123456 for UK, 84987654321 for Vietnam, etc.) without + or spaces.' 
-            });
-        }
-        return;
-    }
+            return res.
+            */
     // Use the international number format (E.164, without '+')
     num = phone.getNumber('e164').replace('+', '');
 
