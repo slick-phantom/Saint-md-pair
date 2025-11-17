@@ -27,4 +27,8 @@
 
 ## Step 1: Fork the Repository
 
+<div align="center">
+
 [![Fork](https://img.shields.io/badge/Step_1-Fork_Repo-brightgreen.svg)](https://gitlab.com/ynwghosted/savy_x_pair_code/-/forks/new)
+
+</div>
