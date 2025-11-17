@@ -22,6 +22,7 @@
     "express": "^4.18.2",
     "cors": "^2.8.5",
     "sdnight": "^7.0.0-rc.6",
+    "awesome-phonenumber": "^7.2.0",
     "megajs": "^1.3.0",
     "pino": "^8.0.0"
   },
