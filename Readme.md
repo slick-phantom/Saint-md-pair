@@ -34,7 +34,7 @@
 </div>
 
 
-```markdown
+
 ## Step 2: Configure Mega Credentials
 
 <div align="center">
