@@ -39,19 +39,23 @@
 
 <div align="center">
 
-[![Edit redis.js](https://img.shields.io/badge/⚙️_Step_2-Edit_Mega_Credentials-important.svg)](https://gitlab.com/ynwghosted/savy_x_pair_code/-/blob/main/redis.js)
+[![Edit redis.js](https://img.shields.io/badge/⚙️_Step_2-Edit_Redis_Credentials-important.svg)](https://gitlab.com/ynwghosted/savy_x_pair_code/-/blob/main/redis.js)
 
 [![Get redis Credentials](https://img.shields.io/badge/🔑_Get_Credentials-redis_Cloud_Portal-red.svg)](https://app.redislabs.com/#/signup/)
 
 </div>
 
-Update the Mega configuration in `mega.js`:
+Update the redis configuration in `redis.js`:
 ```javascript
-email: 'your-email@example.com',
-password: 'your-mega-password',
+host: ‘your redis database public endpoint here'        
+port: 'part of public endpoint'
+username: 'this is mostly default'
+password: 'your database password'
 ```
 
+
 ## Step 3: Customize Interface Files
+
 
 <div align="center">
 
