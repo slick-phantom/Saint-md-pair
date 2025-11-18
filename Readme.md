@@ -35,13 +35,13 @@
 
 
 
-## Step 2: Configure Mega Credentials
+## Step 2: Configure redis Credentials
 
 <div align="center">
 
-[![Edit Mega.js](https://img.shields.io/badge/⚙️_Step_2-Edit_Mega_Credentials-important.svg)](https://gitlab.com/ynwghosted/savy_x_pair_code/-/blob/main/mega.js)
+[![Edit redis.js](https://img.shields.io/badge/⚙️_Step_2-Edit_Mega_Credentials-important.svg)](https://gitlab.com/ynwghosted/savy_x_pair_code/-/blob/main/redis.js)
 
-[![Get Mega Credentials](https://img.shields.io/badge/🔑_Get_Credentials-MegaNZ_Developer_Portal-blue.svg)](https://mega.nz/sdk)
+[![Get redis Credentials](https://img.shields.io/badge/🔑_Get_Credentials-redis_Cloud_Portal-red.svg)](https://app.redislabs.com/#/signup/)
 
 </div>
 
