@@ -32,6 +32,10 @@ app.get('/pair', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'pair.html'));
 });
 
+app.get('/sesion', (req,res) => {
+    res.sendFile(path.join(__dirname, 'public', 'session.html'));
+});
+
 // Health check endpoint
 app.get('/health', (req, res) => {
     res.json({ 
