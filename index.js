@@ -32,7 +32,7 @@ app.get('/pair', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'pair.html'));
 });
 
-app.get('/sesion', (req,res) => {
+app.get('/session', (req,res) => {
     res.sendFile(path.join(__dirname, 'public', 'session.html'));
 });
 
