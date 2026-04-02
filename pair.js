@@ -7,7 +7,7 @@ import SupabaseSessionStore from './supabase.js'; // Switched from redis.js to s
 const router = express.Router();
 
 // Generate unique session ID - Changed default brand to SAINT
-function generateSessionId(brand = 'SAINT') {
+function generateSessionId(brand = 'SAIN') {
     const timestamp = Date.now().toString();
     const random = Math.random().toString(36).substr(2, 6);
     return `${brand}~${timestamp}${random}`;
@@ -42,7 +42,7 @@ async function uploadSessionToSupabase(sessionId, dirs) {
 
 router.get('/pair', async (req, res) => {
     let num = req.query.number;
-    const brand = req.query.brand || 'SAINT'; // Changed from SAVY to SAINT
+    const brand = 'SAIN'; // Changed from SAVY to SAINT
     
     // Generate unique session ID
     const sessionId = generateSessionId(brand);
