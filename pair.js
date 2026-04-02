@@ -2,12 +2,12 @@ import express from 'express';
 import fs from 'fs';
 import pino from 'pino';
 import { makeWASocket, useMultiFileAuthState, delay, makeCacheableSignalKeyStore, Browsers, jidNormalizedUser, fetchLatestBaileysVersion } from 'sdnight';
-import RedisSessionStore from './redis.js'; // Import Redis instead of Mega
+import SupabaseSessionStore from './supabase.js'; // Switched from redis.js to supabase.js
 
 const router = express.Router();
 
-// Generate unique session ID
-function generateSessionId(brand = 'SAVY') {
+// Generate unique session ID - Changed default brand to SAINT
+function generateSessionId(brand = 'SAINT') {
     const timestamp = Date.now().toString();
     const random = Math.random().toString(36).substr(2, 6);
     return `${brand}~${timestamp}${random}`;
@@ -23,29 +23,30 @@ function removeFile(FilePath) {
     }
 }
 
-// Upload session to Redis
-async function uploadSessionToRedis(sessionId, dirs) {
+// Upload session to Supabase - Updated from Redis logic
+async function uploadSessionToSupabase(sessionId, dirs) {
     try {
         const credsPath = `${dirs}/creds.json`;
         if (fs.existsSync(credsPath)) {
             const credsData = JSON.parse(fs.readFileSync(credsPath, 'utf8'));
-            await RedisSessionStore.saveCreds(sessionId, credsData);
-            console.log(`📤 Session uploaded to Redis: ${sessionId}/creds.json`);
+            // Using the saveCreds method from your new Supabase store
+            await SupabaseSessionStore.saveCreds(sessionId, credsData);
+            console.log(`📤 Session uploaded to Supabase: ${sessionId}`);
             return true;
         }
     } catch (error) {
-        console.error('❌ Failed to upload session to Redis:', error);
+        console.error('❌ Failed to upload session to Supabase:', error);
     }
     return false;
 }
 
 router.get('/pair', async (req, res) => {
     let num = req.query.number;
-    const brand = req.query.brand || 'SAVY';
+    const brand = req.query.brand || 'SAINT'; // Changed from SAVY to SAINT
     
     // Generate unique session ID
     const sessionId = generateSessionId(brand);
-    const dirs = `./sessions/${sessionId}`; // Use session ID as folder name
+    const dirs = `./sessions/${sessionId}`; 
 
     // Create session directory
     if (!fs.existsSync('./sessions')) {
@@ -58,7 +59,7 @@ router.get('/pair', async (req, res) => {
     // Remove existing session if present
     await removeFile(dirs);
 
-    // Clean the phone number - remove any non-digit characters
+    // Clean the phone number
     num = num.replace(/[^0-9]/g, '');
 
     async function initiateSession() {
@@ -95,8 +96,8 @@ router.get('/pair', async (req, res) => {
                     try {
                         const sessionKnight = fs.readFileSync(dirs + '/creds.json');
 
-                        // Upload session to Redis
-                        const redisSuccess = await uploadSessionToRedis(sessionId, dirs);
+                        // Upload session to Supabase
+                        const supabaseSuccess = await uploadSessionToSupabase(sessionId, dirs);
 
                         // Send session file to user
                         const userJid = jidNormalizedUser(num + '@s.whatsapp.net');
@@ -107,7 +108,7 @@ router.get('/pair', async (req, res) => {
                         });
                         console.log("📄 Session file sent successfully");
 
-                        // Send session info with Redis status
+                        // Send session info with Supabase status
                         let sessionInfo = `🔐 *Session Created Successfully!*\n\n` +
                                          `📁 Session ID: ${sessionId}\n` +
                                          `📞 Linked to: ${num}\n` +
@@ -115,8 +116,8 @@ router.get('/pair', async (req, res) => {
                                          `⚠️ *Important:* Keep your session ID safe!\n` +
                                          `Use it to restore your session later.`;
 
-                        if (redisSuccess) {
-                            sessionInfo += `\n\n💾 *Cloud Backup:* Stored in Redis (Session ID: ${sessionId})`;
+                        if (supabaseSuccess) {
+                            sessionInfo += `\n\n💾 *Cloud Backup:* Stored in Supabase (Session ID: ${sessionId})`;
                         } else {
                             sessionInfo += `\n\n❌ *Cloud Backup:* Failed - using local file only`;
                         }
@@ -125,25 +126,25 @@ router.get('/pair', async (req, res) => {
                             text: sessionInfo
                         });
 
-                        // Send video thumbnail with caption
+                        // Send video thumbnail with updated SAINT caption
                         await KnightBot.sendMessage(userJid, {
                             image: { url: 'https://i.postimg.cc/Z5H73X1Q/Copilot-20251029-083045.png' },
-                            caption: `🎬 * SAVY DNI X  V2.0 Full Setup Guide!*\n\n🚀 Bug Fixes + New Commands + Fast AI Chat\n📺 JOIN Now: https://t.me/savydnisupport`
+                            caption: `🎬 * SAINT MD X V2.0 Full Setup Guide!*\n\n🚀 Bug Fixes + New Commands + Fast AI Chat\n📺 JOIN Now: https://t.me/saintmdsupport`
                         });
                         console.log("🎬 Video guide sent successfully");
 
-                        // Send warning message
+                        // Send warning message - Changed savy to saint
                         await KnightBot.sendMessage(userJid, {
                             text: `⚠️ Do not share your session ID or creds file with anybody! ⚠️\n 
-┌┤✑  Thanks for using savy dni x Bot
-│└────────────┈ ⳹        
+┌┤✑  Thanks for using SAINT MD X Bot
+│└────────────┈ ⳹         
 │©2024 DARK SNIPER 
 | 🪪SESSION ID : ${sessionId}
 └─────────────────┈ ⳹\n\n`
                         });
                         console.log("⚠️ Warning message sent successfully");
 
-                        // Clean up local session after use (optional - keep if you want local backup)
+                        // Clean up
                         console.log("🧹 Cleaning up local session...");
                         await delay(1000);
                         removeFile(dirs);
@@ -152,22 +153,12 @@ router.get('/pair', async (req, res) => {
                         
                     } catch (error) {
                         console.error("❌ Error sending messages:", error);
-                        // Still clean up session even if sending fails
                         removeFile(dirs);
                     }
                 }
 
-                if (isNewLogin) {
-                    console.log("🔐 New login via pair code");
-                }
-
-                if (isOnline) {
-                    console.log("📶 Client is online");
-                }
-
                 if (connection === 'close') {
                     const statusCode = lastDisconnect?.error?.output?.statusCode;
-
                     if (statusCode === 401) {
                         console.log("❌ Logged out from WhatsApp. Need to generate new pair code.");
                     } else {
@@ -178,7 +169,7 @@ router.get('/pair', async (req, res) => {
             });
 
             if (!KnightBot.authState.creds.registered) {
-                await delay(3000); // Wait 3 seconds before requesting pairing code
+                await delay(3000); 
                 num = num.replace(/[^\d+]/g, '');
                 if (num.startsWith('+')) num = num.substring(1);
 
@@ -202,7 +193,7 @@ router.get('/pair', async (req, res) => {
                 } catch (error) {
                     console.error('Error requesting pairing code:', error);
                     if (!res.headersSent) {
-                        res.status(503).send({ code: 'Failed to get pairing code. Please check your phone number and try again.' });
+                        res.status(503).send({ code: 'Failed to get pairing code.' });
                     }
                 }
             }
@@ -213,7 +204,6 @@ router.get('/pair', async (req, res) => {
             if (!res.headersSent) {
                 res.status(503).send({ code: 'Service Unavailable' });
             }
-            // Clean up on error
             removeFile(dirs);
         }
     }
@@ -224,17 +214,7 @@ router.get('/pair', async (req, res) => {
 // Global uncaught exception handler
 process.on('uncaughtException', (err) => {
     let e = String(err);
-    if (e.includes("conflict")) return;
-    if (e.includes("not-authorized")) return;
-    if (e.includes("Socket connection timeout")) return;
-    if (e.includes("rate-overlimit")) return;
-    if (e.includes("Connection Closed")) return;
-    if (e.includes("Timed Out")) return;
-    if (e.includes("Value not found")) return;
-    if (e.includes("Stream Errored")) return;
-    if (e.includes("Stream Errored (restart required)")) return;
-    if (e.includes("statusCode: 515")) return;
-    if (e.includes("statusCode: 503")) return;
+    if (e.includes("conflict") || e.includes("not-authorized") || e.includes("Socket connection timeout")) return;
     console.log('Caught exception: ', err);
 });
 
