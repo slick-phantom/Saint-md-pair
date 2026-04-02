@@ -5,7 +5,7 @@ const router = express.Router();
  * POST /api/generate
  * Receives bot configuration and returns a bootstrap script as a file.
  */
-router.post('/generate', async (req, res) => {
+router.get('/generate', async (req, res) => {
     try {
         const { sessionId, authorizedNumber, botPrefix } = req.body;
 
