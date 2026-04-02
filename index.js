@@ -4,6 +4,7 @@ import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import pairRouter from './pair.js';
+import generateRoute from './generate.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -21,6 +22,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Use your pair.js as API route - this handles /api/pair
 app.use('/api', pairRouter);
+
+app.use('/api', generateRoute);
 
 // Serve main page
 app.get('/', (req, res) => {
