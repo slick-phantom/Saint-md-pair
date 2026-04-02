@@ -59,5 +59,4 @@ setup();
         res.status(500).json({ error: 'Failed to generate the script.' });
     }
 };
-
-module.exports = { generatePackage };
+export default router;
