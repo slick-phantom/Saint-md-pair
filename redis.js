@@ -4,7 +4,7 @@ import Redis from 'ioredis';
 class RedisSessionStore {
     constructor() {
         this.redis = new Redis({
-            host: 'redis-11460.c93.us-east-1-3.ec2.cloud.redislabs.com:11460',
+            host: 'redis://default:zCPwihuAgtNby02fFfGVJaI92DROPhok@redis-11460.c93.us-east-1-3.ec2.cloud.redislabs.com:11460',
             port: 11460,
             username: 'default',
             password: 'zCPwihuAgtNby02fFfGVJaI92DROPhok',
