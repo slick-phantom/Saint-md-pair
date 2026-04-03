@@ -3,135 +3,203 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>savy.DNI.x - Deployment</title>
+    <title>Deploy • savy.DNI.x</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Same CSS as before */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
-        .container { background: white; border-radius: 15px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); padding: 40px; width: 100%; max-width: 500px; }
-        .logo { text-align: center; margin-bottom: 30px; }
-        .logo h1 { color: #333; font-size: 28px; margin-bottom: 5px; }
-        .logo p { color: #666; font-size: 16px; }
-        .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; color: #333; font-weight: 600; }
-        input { width: 100%; padding: 12px 15px; border: 2px solid #e1e5e9; border-radius: 8px; font-size: 16px; transition: border-color 0.3s; }
-        input:focus { outline: none; border-color: #667eea; }
-        .btn { width: 100%; padding: 14px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: transform 0.2s; }
-        .btn:hover { transform: translateY(-2px); }
-        .btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-        .loading { display: none; text-align: center; margin: 20px 0; }
-        .spinner { border: 3px solid #f3f3f3; border-top: 3px solid #667eea; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 0 auto 10px; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .result { display: none; margin-top: 20px; padding: 15px; border-radius: 8px; text-align: center; }
-        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-        .download-btn { display: inline-block; margin-top: 15px; padding: 12px 25px; background: #28a745; color: white; text-decoration: none; border-radius: 6px; font-weight: 600; }
-        .instructions { margin-top: 25px; padding: 15px; background: #f8f9fa; border-radius: 8px; font-size: 14px; }
-        .instructions h3 { margin-bottom: 10px; color: #333; }
-        .instructions ol { padding-left: 20px; }
-        .instructions li { margin-bottom: 8px; color: #555; }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #020617;
+            color: #f8fafc;
+            overflow-x: hidden;
+        }
+
+        /* Animated Mesh Background */
+        .mesh {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(168, 85, 247, 0.15) 0px, transparent 50%),
+                radial-gradient(at 50% 100%, rgba(79, 70, 229, 0.1) 0px, transparent 50%);
+        }
+
+        .glass-card {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(24px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .input-field {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .input-field:focus {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: #6366f1;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+            outline: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -5px rgba(79, 70, 229, 0.4);
+        }
+
+        .btn-primary:active { transform: translateY(0); }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .shimmer-text {
+            background: linear-gradient(90deg, #f8fafc 0%, #94a3b8 50%, #f8fafc 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 4s linear infinite;
+        }
     </style>
 </head>
-<body>
-    <div class="container">
-        <div class="logo">
-            <h1>🚀 savy.DNI.x</h1>
-            <p>Bot Deployment Generator</p>
-        </div>
-        
-        <form id="deployForm">
-            <div class="form-group">
-                <label for="sessionId">SESSION_ID</label>
-                <input type="text" id="sessionId" placeholder="Enter your SESSION_ID" required>
+<body class="min-h-screen flex items-center justify-center p-6">
+    <div class="mesh"></div>
+
+    <div class="w-full max-w-xl">
+        <div class="text-center mb-10">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-indigo-600/20 border border-indigo-500/30 mb-4">
+                <i class="fas fa-rocket text-2xl text-indigo-400"></i>
             </div>
-            
-            <div class="form-group">
-                <label for="authorizedNumber">WhatsApp Number</label>
-                <input type="text" id="authorizedNumber" placeholder="e.g., 2349012345678" required>
+            <h1 class="text-4xl font-extrabold tracking-tight mb-2">saint.<span class="text-indigo-500">md</span>.x</h1>
+            <p class="text-slate-400 font-medium">Next-Gen Deployment Engine</p>
+        </div>
+
+        <div class="glass-card rounded-[32px] p-8 md:p-12">
+            <form id="deployForm" class="space-y-6">
+                <div class="space-y-2">
+                    <label for="sessionId" class="text-xs font-bold uppercase tracking-widest text-slate-500 ml-1">Session Identity</label>
+                    <div class="relative">
+                        <i class="fas fa-fingerprint absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"></i>
+                        <input type="text" id="sessionId" 
+                            class="input-field w-full py-4 pl-12 pr-4 rounded-2xl text-white placeholder:text-slate-600"
+                            placeholder="Paste your unique session ID" required>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <label for="authorizedNumber" class="text-xs font-bold uppercase tracking-widest text-slate-500 ml-1">Master Number</label>
+                        <div class="relative">
+                            <i class="fab fa-whatsapp absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"></i>
+                            <input type="text" id="authorizedNumber" 
+                                class="input-field w-full py-4 pl-12 pr-4 rounded-2xl text-white placeholder:text-slate-600"
+                                placeholder="2349012345678" required>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label for="botPrefix" class="text-xs font-bold uppercase tracking-widest text-slate-500 ml-1">Command Prefix</label>
+                        <div class="relative">
+                            <i class="fas fa-terminal absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"></i>
+                            <input type="text" id="botPrefix" 
+                                class="input-field w-full py-4 pl-12 pr-4 rounded-2xl text-white"
+                                value="!">
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" id="generateBtn" class="btn-primary w-full py-4 rounded-2xl font-bold text-lg flex items-center justify-center gap-3">
+                    <span id="btnText">Compile & Download</span>
+                    <i class="fas fa-chevron-right text-sm opacity-50"></i>
+                </button>
+            </form>
+
+            <div id="loading" class="hidden mt-8 text-center animate-pulse">
+                <div class="w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                <p class="text-indigo-400 font-semibold tracking-wide">Building Deployment Package...</p>
             </div>
-            
-            <div class="form-group">
-                <label for="botPrefix">Bot Prefix</label>
-                <input type="text" id="botPrefix" placeholder="e.g., !, ., /" value="!">
+
+            <div id="successResult" class="hidden mt-8 p-6 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl text-center">
+                <div class="w-12 h-12 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <i class="fas fa-check text-emerald-400"></i>
+                </div>
+                <h3 class="text-emerald-400 font-bold mb-1">Manifest Ready</h3>
+                <p class="text-slate-400 text-sm">Deployment script has been initialized and downloaded.</p>
             </div>
-            
-            <button type="submit" class="btn" id="generateBtn">
-                Generate Deployment Package
-            </button>
-        </form>
-        
-        <div class="loading" id="loading">
-            <div class="spinner"></div>
-            <p>Generating deployment package...</p>
+
+            <div id="errorResult" class="hidden mt-8 p-6 bg-rose-500/10 border border-rose-500/20 rounded-2xl flex items-center gap-4">
+                <i class="fas fa-circle-exclamation text-rose-400 text-xl"></i>
+                <div>
+                    <h3 class="text-rose-400 font-bold text-sm uppercase tracking-wider">System Failure</h3>
+                    <p id="errorMessage" class="text-slate-400 text-sm">Failed to generate package.</p>
+                </div>
+            </div>
+
+            <div class="mt-10 pt-8 border-t border-white/5">
+                <h4 class="text-xs font-bold text-indigo-400 uppercase tracking-[0.2em] mb-4">Finalization Steps</h4>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="flex gap-3 text-sm text-slate-400">
+                        <span class="flex-shrink-0 w-6 h-6 rounded-lg bg-white/5 flex items-center justify-center text-[10px] font-bold">01</span>
+                        <p>Upload <code class="text-indigo-300">index.js</code> to your host.</p>
+                    </div>
+                    <div class="flex gap-3 text-sm text-slate-400">
+                        <span class="flex-shrink-0 w-6 h-6 rounded-lg bg-white/5 flex items-center justify-center text-[10px] font-bold">02</span>
+                        <p>Run <code class="text-indigo-300">node index.js</code> in terminal.</p>
+                    </div>
+                </div>
+            </div>
         </div>
-        
-        <div class="result success" id="successResult">
-            <h3>✅ Package Generated Successfully!</h3>
-            <p>Check the downloaded file or your downloads folder.</p>
-            <p><small>If download didn't start automatically, check your browser's pop-up blocker.</small></p>
-        </div>
-        
-        <div class="result error" id="errorResult">
-            <h3>❌ Error</h3>
-            <p id="errorMessage">Failed to generate package</p>
-        </div>
-        
-        <div class="instructions">
-            <h3>📋 Deployment Instructions</h3>
-            <ol>
-                <li>Fill in your credentials above</li>
-                <li>Click "Generate Deployment Package"</li>
-                <li>File will download automatically</li>
-                <li>Upload to Katabump/Lunes hosting</li>
-                <li>Run: <code>node index.js</code></li>
-                <li>Bot will auto-configure and start</li>
-            </ol>
-        </div>
+
+        <p class="text-center mt-8 text-slate-600 text-xs font-medium tracking-widest uppercase">
+            Powered by Savy Engineering &copy; 2026
+        </p>
     </div>
 
     <script>
         document.getElementById('deployForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            const sessionId = document.getElementById('sessionId').value.trim();
-            const authorizedNumber = document.getElementById('authorizedNumber').value.trim();
-            const botPrefix = document.getElementById('botPrefix').value.trim() || '!';
-            
-            const generateBtn = document.getElementById('generateBtn');
+            const btn = document.getElementById('generateBtn');
             const loading = document.getElementById('loading');
-            const successResult = document.getElementById('successResult');
-            const errorResult = document.getElementById('errorResult');
-            const errorMessage = document.getElementById('errorMessage');
+            const success = document.getElementById('successResult');
+            const error = document.getElementById('errorResult');
             
-            // Reset states
-            successResult.style.display = 'none';
-            errorResult.style.display = 'none';
-            generateBtn.disabled = true;
-            loading.style.display = 'block';
-            
+            // UI Transition
+            success.classList.add('hidden');
+            error.classList.add('hidden');
+            btn.disabled = true;
+            btn.classList.add('opacity-50', 'scale-95');
+            loading.classList.remove('hidden');
+
             try {
-                // Call your backend
                 const response = await fetch('/api/generate', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        sessionId: sessionId,
-                        authorizedNumber: authorizedNumber,
-                        botPrefix: botPrefix
+                        sessionId: document.getElementById('sessionId').value.trim(),
+                        authorizedNumber: document.getElementById('authorizedNumber').value.trim(),
+                        botPrefix: document.getElementById('botPrefix').value.trim() || '!'
                     })
                 });
                 
                 if (!response.ok) {
                     const errorData = await response.json();
-                    throw new Error(errorData.error || 'Failed to generate package');
+                    throw new Error(errorData.error || 'Gateway Rejected Request');
                 }
                 
-                // Get the JavaScript file content
                 const scriptContent = await response.text();
                 
-                // ✅ FIXED: Direct download without blob URLs
+                // Trigger Download
                 const element = document.createElement('a');
                 element.setAttribute('href', 'data:application/javascript;charset=utf-8,' + encodeURIComponent(scriptContent));
                 element.setAttribute('download', 'index.js');
@@ -140,21 +208,19 @@
                 element.click();
                 document.body.removeChild(element);
                 
-                // Show success
-                loading.style.display = 'none';
-                successResult.style.display = 'block';
-                
-            } catch (error) {
-                console.error('Error:', error);
-                loading.style.display = 'none';
-                errorMessage.textContent = error.message;
-                errorResult.style.display = 'block';
+                loading.classList.add('hidden');
+                success.classList.remove('hidden');
+            } catch (err) {
+                loading.classList.add('hidden');
+                document.getElementById('errorMessage').textContent = err.message;
+                error.classList.remove('hidden');
             } finally {
-                generateBtn.disabled = false;
+                btn.disabled = false;
+                btn.classList.remove('opacity-50', 'scale-95');
             }
         });
-        
-        // Auto-focus first input
+
+        // Focus effect
         document.getElementById('sessionId').focus();
     </script>
 </body>
